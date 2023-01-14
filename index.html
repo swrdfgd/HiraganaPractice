@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hiragana Practice</title>
+</head>
+
+<body>
+<style>
+.btn {
+  border-radius: 28px;
+  color: #fff;
+  text-shadow: 0 0 4px black;
+  font-family: Arial;
+  font-size: 56px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  min-width: 12rem;
+  cursor:pointer;
+}
+</style>
+<table border="0" cellpadding="20" style="font-size: 70px; width: 100%;">
+<tbody>
+  <tr>
+    <td>
+      Score: <span id="skor">0</span>
+    </td>
+    <td align="right">
+      <span id="hati">❤️❤️❤️</span>
+    </td>
+  </tr>
+</tbody></table><br />
+
+<center><div id="soal" style="font-size: 70px;"></div></center><br />
+<table border="0" cellpadding="20" style="width: 100%;">
+<tbody>
+  <tr>
+    <td align="right" id="opsiA">
+    </td>
+    <td id="opsiB">
+    </td>
+  </tr>
+  <tr>
+    <td align="right" id="opsiC">
+    </td>
+    <td id="opsiD">
+    </td>
+  </tr>
+</tbody></table><br />
+
+<br />
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
+<script>
+  //varGlobal
+  hiragana = [  ["あ", "a"],   ["い", "i"],   ["う", "u"],   ["え", "e"],   ["お", "o"],   ["か", "ka"],   ["き", "ki"],   ["く", "ku"],   ["け", "ke"],   ["こ", "ko"],   ["さ", "sa"],   ["し", "shi"],   ["す", "su"],   ["せ", "se"],   ["そ", "so"],   ["た", "ta"],   ["ち", "chi"],   ["つ", "tsu"],   ["て", "te"],   ["と", "to"],   ["な", "na"],   ["に", "ni"],   ["ぬ", "nu"],   ["ね", "ne"],   ["の", "no"],   ["は", "ha"],   ["ひ", "hi"],   ["ふ", "fu"],   ["へ", "he"],   ["ほ", "ho"],   ["ま", "ma"],   ["み", "mi"],   ["む", "mu"],   ["め", "me"],   ["も", "mo"],   ["や", "ya"],   ["ゆ", "yu"],   ["よ", "yo"],   ["ら", "ra"],   ["り", "ri"],   ["る", "ru"],   ["れ", "re"],   ["ろ", "ro"],   ["わ", "wa"],   ["を", "wo"],   ["ん", "n"],   ["が", "ga"],   ["ぎ", "gi"],   ["ぐ", "gu"],   ["げ", "ge"],   ["ご", "go"],   ["ざ", "za"],   ["じ", "ji"],   ["ず", "zu"],   ["ぜ", "ze"],   ["ぞ", "zo"],   ["だ", "da"],   ["ぢ", "ji"],   ["づ", "dzu"],   ["で", "de"],   ["ど", "do"],   ["ば", "ba"],   ["び", "bi"],   ["ぶ", "bu"],   ["べ", "be"],   ["ぼ", "bo"],   ["ぱ", "pa"],   ["ぴ", "pi"],   ["ぷ", "pu"],   ["ぺ", "pe"],   ["ぽ", "po"],]; 
+
+  koleksiSoalDimainkan = [];
+  skor = 0;
+  banyakHati = 3;
+
+  
+</script>
+
+<script>
+  //Fungsi-fungsi
+//fungsi warna random------------------------------------------------------------------------------
+  function getRandomColor() {
+    var lettersz = '0123456789abcdef';
+    var colorz = '#';
+    for (var i = 0; i < 6; i++) {
+      colorz += lettersz[Math.floor(Math.random() * 16)];
+    }
+    return colorz;
+  }
+//------------------------------------------------------------------------------------------------
+//fungsi string random---------------------------------------------------------------------------------------------------------------------
+  function randstring(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() *charactersLength));
+   }
+   return result;
+  }
+//------------------------------------------------------------------------------------------------
+</script>
+
+<script>
+  //updateSkordanHati
+  function updateskor(){
+    document.getElementById('skor').innerHTML = skor;
+  }
+  function updateHati(){
+    document.getElementById('hati').innerHTML = '';
+    for (var i = 0; i < banyakHati; i++){
+      document.getElementById('hati').innerHTML += '❤️';
+    }
+  }
+
+  
+</script>
+
+<script>
+  function gameOver(){
+    var daftarOpsi = ['A','B','C','D'];
+    document.getElementById('soal').innerHTML = 'Game Over';
+    for (var i = 0; i < daftarOpsi.length;i++){
+      var pilihanOpsi = daftarOpsi[i];
+      document.getElementById('opsi'+pilihanOpsi).innerHTML =  '';
+      if (pilihanOpsi == 'A'){
+        document.getElementById('opsi'+pilihanOpsi).innerHTML =  '<button class="btn" type="button" id = "opsiTom'+pilihanOpsi+'" onmouseover="document.getElementById(\'opsiTom'+pilihanOpsi+'\').style.backgroundColor=\''+getRandomColor()+'\';" onmouseout="document.getElementById(\'opsiTom'+pilihanOpsi+'\').style.backgroundColor=\''+getRandomColor()+'\';" style="background-color: '+getRandomColor()+'" onclick="buatSoal();skor=0;banyakHati=3;updateskor();updateHati();">Play Again</button>';
+      }
+    }
+  }
+</script>
+
+<script>
+  //jawaban
+  jawabanBenar = '';
+  opsiA = 'non';
+  opsiB = 'non';
+  opsiC = 'non';
+  opsiD = 'non';
+  function jawab(jawaban){
+    var daftarOpsi = ['A','B','C','D'];
+    eval('jawaban = opsi'+jawaban);
+    if (jawaban == jawabanBenar){
+        skor += Math.ceil(Math.random()*koleksiSoalDimainkan.length);
+      updateskor();
+      document.getElementById('soal').innerHTML += `<br>Correct! It's "${jawabanBenar}"`;
+
+      if (Math.random() < 1/2){
+        koleksiSoalDimainkan.push(hiragana[Math.floor(Math.random()*hiragana.length)]);
+        koleksiSoalDimainkan.push(hiragana[Math.floor(Math.random()*hiragana.length)]);
+      }
+    }
+      else {
+        document.getElementById('soal').innerHTML += `<br>Wrong! It's "${jawabanBenar}"`;
+        koleksiSoalDimainkan.push(soalTerpilih)
+        banyakHati -=1;updateHati();
+      }
+    for (var i = 0; i < daftarOpsi.length;i++){
+      var pilihanOpsi = daftarOpsi[i];
+      document.getElementById('opsi'+pilihanOpsi).innerHTML =  '';
+      if (pilihanOpsi == 'A'){
+        document.getElementById('opsi'+pilihanOpsi).innerHTML =  '<button class="btn" type="button" id = "opsiTom'+pilihanOpsi+'" onmouseover="document.getElementById(\'opsiTom'+pilihanOpsi+'\').style.backgroundColor=\''+getRandomColor()+'\';" onmouseout="document.getElementById(\'opsiTom'+pilihanOpsi+'\').style.backgroundColor=\''+getRandomColor()+'\';" style="background-color: '+getRandomColor()+'" onclick="buatSoal();">Next</button>';;
+      }
+    }
+    if (banyakHati==0){gameOver();}
+  }
+</script>
+
+
+<script>
+  //buatSoal
+  function buatSoal(){
+    if (koleksiSoalDimainkan.length < 1){mulai();return}
+    var daftarOpsi = ['A','B','C','D'];
+    soalTerpilih = koleksiSoalDimainkan[Math.floor(Math.random()*koleksiSoalDimainkan.length)];
+        
+      soal = soalTerpilih[0];
+      jawabanBenar = soalTerpilih[1];
+      opsiA = hiragana[Math.floor(Math.random()*hiragana.length)][1];
+      opsiB = hiragana[Math.floor(Math.random()*hiragana.length)][1];
+      opsiC = hiragana[Math.floor(Math.random()*hiragana.length)][1];
+      opsiD = hiragana[Math.floor(Math.random()*hiragana.length)][1];
+      eval('opsi'+daftarOpsi[Math.floor(Math.random()*daftarOpsi.length)]+' = jawabanBenar;');
+      opsi = [opsiA, opsiB, opsiC, opsiD]
+      document.getElementById('soal').innerHTML = soal;
+      for (var i = 0; i < daftarOpsi.length;i++){
+        var pilihanOpsi = daftarOpsi[i];
+        document.getElementById('opsi'+pilihanOpsi).innerHTML =  '<button class="btn" type="button" id = "opsiTom'+pilihanOpsi+'" onmouseover="document.getElementById(\'opsiTom'+pilihanOpsi+'\').style.backgroundColor=\''+getRandomColor()+'\';" onmouseout="document.getElementById(\'opsiTom'+pilihanOpsi+'\').style.backgroundColor=\''+getRandomColor()+'\';" style="background-color: '+getRandomColor()+'" onclick="jawab(\''+pilihanOpsi+'\')">'+ opsi[i] +'</button>';
+      }
+
+  
+  }
+</script>
+
+
+
+<script>
+  //Mulai
+  function mulai(){
+    
+    koleksiSoalDimainkan.push(hiragana[Math.floor(Math.random()*hiragana.length)]);
+    koleksiSoalDimainkan.push(hiragana[Math.floor(Math.random()*hiragana.length)]);
+    buatSoal();
+  }
+</script>
+
+<script>
+  //loading
+  mulai(); 
+</script>
+</body>
+</html>
