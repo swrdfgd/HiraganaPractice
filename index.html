@@ -59,11 +59,61 @@
   hiragana2 = [  ["あ", "a"],   ["い", "i"],   ["う", "u"],   ["え", "e"],   ["お", "o"],   ["か", "ka"],   ["き", "ki"],   ["く", "ku"],   ["け", "ke"],   ["こ", "ko"],   ["さ", "sa"],   ["し", "shi"],   ["す", "su"],   ["せ", "se"],   ["そ", "so"],   ["た", "ta"],   ["ち", "chi"],   ["つ", "tsu"],   ["て", "te"],   ["と", "to"],   ["な", "na"],   ["に", "ni"],   ["ぬ", "nu"],   ["ね", "ne"],   ["の", "no"],   ["は", "ha"],   ["ひ", "hi"],   ["ふ", "fu"],   ["へ", "he"],   ["ほ", "ho"],   ["ま", "ma"],   ["み", "mi"],   ["む", "mu"],   ["め", "me"],   ["も", "mo"],   ["や", "ya"],   ["ゆ", "yu"],   ["よ", "yo"],   ["ら", "ra"],   ["り", "ri"],   ["る", "ru"],   ["れ", "re"],   ["ろ", "ro"],   ["わ", "wa"],   ["を", "wo"],   ["ん", "n"],   ["が", "ga"],   ["ぎ", "gi"],   ["ぐ", "gu"],   ["げ", "ge"],   ["ご", "go"],   ["ざ", "za"],   ["じ", "ji (zi)"],   ["ず", "zu"],   ["ぜ", "ze"],   ["ぞ", "zo"],   ["だ", "da"],   ["ぢ", "ji (di)"],   ["づ", "dzu"],   ["で", "de"],   ["ど", "do"],   ["ば", "ba"],   ["び", "bi"],   ["ぶ", "bu"],   ["べ", "be"],   ["ぼ", "bo"],   ["ぱ", "pa"],   ["ぴ", "pi"],   ["ぷ", "pu"],   ["ぺ", "pe"],   ["ぽ", "po"],]; 
   
 
-  koleksiSoalDimainkan = [];
+  let koleksiSoalDimainkan = [];
   skor = 0;
   banyakHati = 3;
 
   
+</script>
+
+<script>
+//tambah Yoon
+adaYaYuYo = [false,false,false]
+cekerYoon = []
+function tambahYoon(soal){
+
+   if (soal[1]=='ya'){adaYaYuYo[0]=true}
+   if (soal[1]=='yu'){adaYaYuYo[1]=true}
+   if (soal[1]=='yo'){adaYaYuYo[2]=true}
+   if (!adaYaYuYo.includes(true)){return}
+   if ((soal[1][soal[1].length-1] != 'i')||(soal[1]=='i')){return}
+ 
+   var hasil = [];
+   hasil.push(soal[0])
+   if (soal[0] == 'き'){hasil.push('ky')}
+   if (soal[0] == 'し'){hasil.push('sh')}
+   if (soal[0] == 'ち'){hasil.push('ch')}
+   if (soal[0] == 'に'){hasil.push('ny')}
+   if (soal[0] == 'ひ'){hasil.push('hy')}
+   if (soal[0] == 'み'){hasil.push('my')}
+   if (soal[0] == 'り'){hasil.push('ry')}
+   if (soal[0] == 'ぎ'){hasil.push('gy')}
+   if (soal[0] == 'じ'){hasil.push('j')}
+   if (soal[0] == 'び'){hasil.push('by')}
+   if (soal[0] == 'ぴ'){hasil.push('py')}
+   if (hasil.length < 2){return}
+   
+   let yauoInd = Math.floor(Math.random()*3);
+   while (adaYaYuYo[yauoInd] == false){yauoInd = (yauoInd+1)%3;}
+   
+   if (yauoInd==0){hasil[0] += 'ゃ'; hasil[1] += 'a'}
+   if (yauoInd==1){hasil[0] += 'ゅ'; hasil[1] += 'u'}
+   if (yauoInd==2){hasil[0] += 'ょ'; hasil[1] += 'o'}
+  
+
+   if (soal.length < 3){
+     if (cekerYoon.includes(hasil[1])){return};
+     cekerYoon.push(hasil[1]);
+     hiragana.push(hasil);
+   }
+   else{
+     if (cekerYoon.includes(hasil[1]+'2')){return};
+     cekerYoon.push(hasil[1]+'2');
+     hiragana2.push(hasil);
+   }
+
+   
+}
 </script>
 
 <script>
@@ -149,7 +199,7 @@
         skor += Math.ceil(Math.random()*koleksiSoalDimainkan.length);
       updateskor();
       document.getElementById('soal').innerHTML += `<br>${posMoji[Math.floor(Math.random()*posMoji.length)]} Correct! It's "${jawabanBenar}"`;
-
+      tambahYoon(soalTerpilih)
       if (Math.random() < 1/2){
         if (Math.random() < 1/2){
             koleksiSoalDimainkan.push(hiragana[Math.floor(Math.random()*hiragana.length)]);
@@ -200,6 +250,7 @@
       opsiD = hiragana[Math.floor(Math.random()*hiragana.length)][1];
       }
       else{
+      if (soalTerpilih.length > 3){soalTerpilih.splice(3);}
       soal = soalTerpilih[1];
       jawabanBenar = soalTerpilih[0];
       opsiA = hiragana2[Math.floor(Math.random()*hiragana2.length)][0];
